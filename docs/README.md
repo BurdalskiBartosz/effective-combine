@@ -15,7 +15,7 @@ Admin podpiął jakiś system kontroli wersji i chce dodać nowy projekt. Klika 
 :::
 
 ### Projekty
-W każdym projekcie można będzie stworzyć kolumny na taski do zrobienia, do przetestowania, testowane czy zrobione. Każdą z kolumn będzie można podpiąć pod zewnętrzne oprogramowanie, np. w momencie stworzenia taska, na repozytorium podpiętym pod aplikacje, stworzy nam się branch o nazwie taska lub jeżeli wypełnimy odpowiednie pole przy tworzeniu otrzyma on inną nazwe dodatkowo task dostanie prefix zależny od rodzaju taska np. jeżeli zadanie ma za zadanie coś naprawić to będzie to "fix".
+W każdym projekcie można będzie stworzyć kolumny na taski do zrobienia, do przetestowania, testowane czy zrobione. Każdą z kolumn będzie można podpiąć pod zewnętrzne oprogramowanie, np. w momencie dodania taska do kolumny do zrobienia, na repozytorium podpiętym pod aplikacje, stworzy nam się branch o nazwie taska lub jeżeli wypełnimy odpowiednie pole przy tworzeniu otrzyma on inną nazwe dodatkowo task dostanie prefix zależny od rodzaju taska np. jeżeli zadanie ma za zadanie coś naprawić to będzie to "fix".
 
 ### Taski
 Każdy projekt ma taski, a każdy task powinien być dokładnie opisany, aby każdy kto dopiero dołącza do projektu i dostał zadanie, mógł się odnaleźć.

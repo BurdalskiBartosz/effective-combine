@@ -6,114 +6,44 @@ sidebarDepth: 2
 # Task
 ## Diagramy przypadków użycia
 
-### Logowanie
+### Task
 @startuml
-actor Gość
+actor Użytkownik
 
-Gość -- (Logowanie)
-(Logowanie) --> (Sprawdzenie blokady na ip) : include
-(Sprawdzenie blokady na ip) <-- (Wyświetlenie informacji o blokadzie IP) : extend
-Gość -- (Przypomnienie hasła)
+Użytkownik -- (Dodanie taska)
+(Dodanie taska) <-- (Wyświetlenie formularza) : exclude
+(Wyświetlenie formularza) --> (Wybór rodzaju taska) : include
+Użytkownik -- (Usunięcie taska)
+(Usunięcie taska) --> (Wyświetlenie pytania \nczy usunąć branch) : include
+Użytkownik -- (Edycja taska)
 @enduml
 
-### Zarządzanie użytkownikami
-
-@startuml
-actor Administrator
-
-left to right direction
-
-Administrator -- (Dodanie użytownika)
-(Dodanie użytownika) --> (Wybór grup użytkownika) : include
-Administrator -- (Usunięcie użytownika)
-Administrator -- (Edycja użytownika)
-(Edycja użytownika) --> (Zmiana grupy użytkownika) : include
-Administrator -- (Wyświetlenia blokad IP)
-(Wyświetlenia blokad IP) <-- (Odblokowanie adresu IP) : extend
-Administrator -- (Wyświetlenie whitelist'y)
-Administrator -- (Usunięcie adresu IP z whitelist'y)
-Administrator -- (Dodanie adresów IP do whitelist'y)
-
-@enduml
-
-### Zarządzanie grupami użytkowników
-
-@startuml
-actor Administrator
-
-Administrator -- (Dodanie grupy użytkowników)
-(Dodanie grupy użytkowników) --> (Wybór uprawnień dla grupy) : include
-Administrator -- (Usunięcie grupy użytkowników)
-Administrator -- (Edycja grupy użytkowników)
-@enduml
-
-## Przypadki użycia 
-### Logowanie
+### Dodanie taska
 #### Diagram aktywności
 @startuml
-(*) --> "Sprawdzenie blokady na adres IP"
-if "Adres zablokowany" then
-    --> [Tak] "Wyświetlenie informacji o blokadzie IP"
-    --> (*)
-else
-    --> [Nie] "Wyświetlenie formularza logowania"
-endif
---> "Wpisanie adresu email\noraz hasła"
---> "Sprawdzenie poprawności danych"
-if "Dane poprawne" then
-    --> [Tak] "Przekierowanie na dashboard"
-    --> (*)
-else
-    --> [Nie] "Zapisanie informacji o nieudanym logowaniu"
-endif
---> "Sprawdzenie czy niepoprawne\nlogowanie nie wystąpiło\nzbyt wiele razy"
-if "Przekroczono liczbę niepoprawnych prób zalogowania" then
-    --> [Tak] "Dodanie informacji\no blokadzie IP do bazy"
-    --> "Wyświetlenie informacji o blokadzie IP"
-else 
-    --> [Nie] "Wyświetlenie informacji o błędzie"
-endif
---> (*)
-@enduml
-
-
-### Przypomnienie hasła
-#### Diagram aktywności
-@startuml
-(*) --> "Sprawdzenie blokady na adres IP"
-if "Adres zablokowany" then
-    --> [Tak] "Wyświetlenie informacji o blokadzie IP"
-    --> (*)
-else
-    --> [Nie] "Wyświetlenie formularza z \nprzypomnieniem hasła"
-endif
---> "Wpisanie adresu email"
---> "Sprawdzenie czy adres email \nistenieje w bazie"
-if "Istnieje" then
-    --> [Tak] "Wysłanie emaila z adresem url do zmiany hasła"
-    --> "Wyświetlenie informacji o wysłaniu \nna email linku z resetem hasła"
-    --> "Przekierowanie na strone logowania"
-    --> "Wejście na adres url z otrzymanego emaila"
-    --> "Sprawdzenie czy link jest aktywny"
-    if "Link jest aktywny" then
-      --> [Tak] "Link jest prawidłowy"
-      if "Link jest prawidłowy" then
-        --> [Tak] "Wyświetlenie formularza ze zmianą hasła"
-        --> "Wpisanie nowego hasła"
-        --> "Wyświetlenie informacji o \npoprawnie zmienionym haśle"
-        --> "Przejście na widok logowania"
+  (*)--> "Wyświetlenie formularza dodania taska"
+     --> "Projekt posiada repozytorium"
+if "Posiada" then
+  --> [Tak] Stworzenia brancha na repozytorium
+    if Wypełniono pole "Nazwa brancha" then
+      --> [Tak] "Ustawienie nazwy na podaną przez użytkownika"
+      --> Rodzaj taska
+    else
+    --> [Nie] "Ustawienie nazwy na nazwe taska"
+    --> Rodzaj taska
+        if Ustawiono then
+        --> [Tak] Dodanie prefixu na początku nazwy brancha
         --> (*)
       else
-        --> [Nie] "Wyświetlenie błędu o nieaktywnym linku"
+        --> [Nie] Utworzenie brancha bez dodawania prefixu
+        --> (*)
       endif
-    else
-        --> [Nie] "Wyświetlenie błędu o nieaktywnym linku"
-        --> "Wyświetlenie formularza z \nprzypomnieniem hasła"
     endif
 else
-    --> [Nie] "Wyświetlenie informacji o błędzie"
-    --> "Wpisanie adresu email"
+  --> [Nie] Dodanie taska bez stworzenia brancha
+  --> (*)
 endif
+
 @enduml
 #### Diagram sekwencji
 @startuml
@@ -122,38 +52,83 @@ actor Użytkownik
 participant Przeglądarka
 participant Serwer
 
-Przeglądarka -> Użytkownik: Wyświetl formularz z przypomnieniem hasła
+Przeglądarka -> Użytkownik: Wyświetl formularz z dodaniem taska
 loop
-Użytkownik -> Przeglądarka : Wpisanie adresu email
-Przeglądarka -> Serwer : POST: /remind-password-token
-alt taki adres email nieistenieje
-    Serwer -> Przeglądarka : 400: { alias: INCORRECT_DATA }
-    Przeglądarka -> Użytkownik : Wyświetlenie informacji o błędzie
-else adres email znajduje się w bazie
-    Serwer -> Przeglądarka : 200
-    Serwer -> Użytkownik : Wysłanie maila z linkiem do zmiany hasła
-    Przeglądarka -> Użytkownik : Informacja o wysłaniu maila z linkiem do zmiany hasła
-    Przeglądarka -> Użytkownik : Przekierowanie na widok logowania
-
-end
+  Użytkownik -> Przeglądarka : Wypełnienie formularza
+  alt nie wypełniono wymaganych pól
+      Przeglądarka -> Użytkownik : Wyświetlenie informacji o brakujących polach
+  else wypełniono wszystkie wymagane pola
+      Przeglądarka -> Serwer  : Get: /project/:id
+  end
 end loop
-    Użytkownik -> Przeglądarka : Wejście na adres url z otrzymanego maila
-    Przeglądarka -> Serwer : GET /remind-password-token/:token
-alt Link jest nieaktywny
-    Serwer -> Przeglądarka : 404: { alias: NOT_FOUND }
-    Przeglądarka -> Użytkownik : Wyświetlenie informacji o błędzie
-else Link jest aktywny
-    Serwer -> Przeglądarka : 200
-end
-  Użytkownik -> Przeglądarka : Wypełnienie formularza ze zmianą hasła
-  Przeglądarka -> Serwer : POST: /remind-password-token/:token/_change-password
-alt Wystąpił błąd
-    Serwer -> Przeglądarka : 400: { alias: CANT_CHANGE_PASSWORD }
-    Przeglądarka -> Użytkownik : Wyświetlenie informacji o błędzie
-else Prawidłowo zmieniono hasło
-    Serwer -> Przeglądarka : 200
-    Przeglądarka -> Użytkownik : Wyświetlenie informacji o prawidłowej zmianie hasła
-end
+  alt projekt nie posiada repozytorium
+    Serwer -> Przeglądarka : { alias: NOT_FOUND }
+    Przeglądarka -> Użytkownik : Informacja o dodaniu taska bez tworzenia brancha
+  else projekt posiada repozytorium
+    Serwer -> Serwer : Podano nazwe brancha
+  end
+  alt nie podano nazwy brancha
+    Serwer -> Serwer : Podano rodzaj taska
+    alt nie podano rodzaju taska
+      Serwer -> Przeglądarka : { alias: NO_NAMED_BRANCH_NO_PREFIX }
+      Przeglądarka -> Użytkownik : Informacja o dodaniu taska z branchem o tej samej nazwie bez prefixu
+    else podano rodzaju taska
+      Serwer -> Przeglądarka : { alias: NO_NAMED_BRANCH_WITH_PREFIX }
+      Przeglądarka -> Użytkownik : Informacja o dodaniu taska z branchem o tej samej nazwie z prefixem
+    end
+  else podano nazwę brancha
+    alt nie podano rodzaju taska
+      Serwer -> Przeglądarka : { alias: NAMED_BRANCH_NO_PREFIX }
+      Przeglądarka -> Użytkownik : Informacja o dodaniu taska z branchem o podanej nazwie bez prefixu
+    else podano rodzaju taska
+      Serwer -> Przeglądarka : { alias: NAMED_BRANCH_WITH_PREFIX }
+      Przeglądarka -> Użytkownik : Informacja o dodaniu taska z branchem o podanej nazwie z prefixem
+    end
+  end
+
+
+@enduml
+### Usuniecie taska
+#### Diagram aktywności
+@startuml
+(*) --> "Sprawdzenie czy task posiada branch"
+if "Posiada" then
+    --> [Tak] Wyświetlenie pytania o usunięcie brancha
+    if "Usunąć" then
+      --> [Tak] Usuń task i branch
+      --> (*)
+    else
+      --> [Nie] Usuń task
+      --> (*)
+    endif
+else
+  --> [Nie] Usunięcie taska
+  --> (*)
+endif
+
+@enduml
+#### Diagram sekwencji
+@startuml
+autonumber
+actor Użytkownik
+participant Przeglądarka
+participant Serwer
+
+Użytkownik -> Przeglądarka : Wybranie taska
+Przeglądarka -> Serwer : Get: /project/:id/branch
+  alt task nie posiada brancha
+    Serwer -> Przeglądarka : { alias: NO_BRANCH }
+    Przeglądarka -> Użytkownik : Wyświetlenie informacji o usunięciu taska
+  else task posiada branch
+    Przeglądarka -> Użytkownik : Wyświetlenie pytania o usunięcie brancha
+    alt nie usuwać brancha
+      Serwer -> Przeglądarka : { alias: KEEP_BRANCH }
+      Przeglądarka -> Użytkownik : Wyświetlenie informacji o usunięciu taska
+    else usunąć branch
+      Serwer -> Przeglądarka : { alias: DELETE_BRANCH }
+      Przeglądarka -> Użytkownik : Wyświetlenie informacji o usunięciu taska razem z branchem
+    end
+  end
 @enduml
 
 ## Diagram klas

@@ -8,43 +8,27 @@ sidebarDepth: 2
 
 ### Logowanie
 @startuml
-actor Gość
+actor Użytkownik
 
-Gość -- (Logowanie)
+Użytkownik -- (Logowanie)
 (Logowanie) --> (Sprawdzenie blokady na ip) : include
 (Sprawdzenie blokady na ip) <-- (Wyświetlenie informacji o blokadzie IP) : extend
-Gość -- (Przypomnienie hasła)
+Użytkownik -- (Przypomnienie hasła)
 @enduml
 
 ### Zarządzanie użytkownikami
 
 @startuml
-actor Administrator
+actor Admin
 
 left to right direction
 
-Administrator -- (Dodanie użytownika)
+Admin -- (Dodanie użytownika)
 (Dodanie użytownika) --> (Wybór grup użytkownika) : include
-Administrator -- (Usunięcie użytownika)
-Administrator -- (Edycja użytownika)
+Admin -- (Usunięcie użytownika)
+Admin -- (Edycja użytownika)
 (Edycja użytownika) --> (Zmiana grupy użytkownika) : include
-Administrator -- (Wyświetlenia blokad IP)
-(Wyświetlenia blokad IP) <-- (Odblokowanie adresu IP) : extend
-Administrator -- (Wyświetlenie whitelist'y)
-Administrator -- (Usunięcie adresu IP z whitelist'y)
-Administrator -- (Dodanie adresów IP do whitelist'y)
 
-@enduml
-
-### Zarządzanie grupami użytkowników
-
-@startuml
-actor Administrator
-
-Administrator -- (Dodanie grupy użytkowników)
-(Dodanie grupy użytkowników) --> (Wybór uprawnień dla grupy) : include
-Administrator -- (Usunięcie grupy użytkowników)
-Administrator -- (Edycja grupy użytkowników)
 @enduml
 
 ## Przypadki użycia 
@@ -157,7 +141,7 @@ end
 @enduml
 
 ## Diagram klas
-### Panel administratora
+### Panel Admina
 @startuml
 class SignInPage <extends Page> {
     
