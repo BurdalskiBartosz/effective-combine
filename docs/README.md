@@ -1,7 +1,7 @@
 ---
 sidebar: auto
 ---
-
+# Projekt zaliczeniowy na studia - PIO
 # Effective combine
 
 ## Czym jest projekt ?
