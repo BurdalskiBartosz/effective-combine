@@ -99,6 +99,28 @@ else
     --> "Wpisanie adresu email"
 endif
 @enduml
+
+#### Diagram klass
+@startuml
+  class User {
+      token: Token
+      id: ID
+      role: String
+      name: String
+      surname: String
+      getToken() : Token
+  }
+
+  class Token {
+      value: Number
+      userId: Number
+      dateExpiration: Date
+      check()
+  }
+
+  User -->"1..*" Token
+@enduml
+
 #### Diagram sekwencji
 @startuml
 autonumber

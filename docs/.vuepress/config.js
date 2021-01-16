@@ -29,8 +29,10 @@ module.exports = {
                     children: [
                       'aplikacja/aktorzy',
                       'aplikacja/uzytkownik',
-                      'aplikacja/projekt',
                       'aplikacja/task',
+                      'aplikacja/projekt',
+                      'aplikacja/klasy',
+                      'aplikacja/architektura',
                     ]
                 },
             ]

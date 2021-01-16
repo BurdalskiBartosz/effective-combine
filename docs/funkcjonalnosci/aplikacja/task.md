@@ -130,26 +130,3 @@ Przeglądarka -> Serwer : Get: /project/:id/branch
     end
   end
 @enduml
-
-## Diagram klas
-### Panel administratora
-@startuml
-class SignInPage <extends Page> {
-    
-}
-class SignInForm extends Form {
-    emailInput: TextInput
-    passwordInput: PasswordInput
-}
-SignInForm -- SignInPage 
-
-
-class User {
-    email: String
-    password: String
-}
-
-class AuthentificationMiddleware {
-    
-}
-@enduml
