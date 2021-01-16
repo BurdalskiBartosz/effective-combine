@@ -9,7 +9,7 @@ cloud Aplikacja {
     component "Effective combine" as App
 }
 
-package Cashmir {
+package Host {
     component Serwer 
 }
 package BazaDanych {

@@ -100,27 +100,6 @@ else
 endif
 @enduml
 
-#### Diagram klass
-@startuml
-  class User {
-      token: Token
-      id: ID
-      role: String
-      name: String
-      surname: String
-      getToken() : Token
-  }
-
-  class Token {
-      value: Number
-      userId: Number
-      dateExpiration: Date
-      check()
-  }
-
-  User -->"1..*" Token
-@enduml
-
 #### Diagram sekwencji
 @startuml
 autonumber
@@ -160,27 +139,4 @@ else Prawidłowo zmieniono hasło
     Serwer -> Przeglądarka : 200
     Przeglądarka -> Użytkownik : Wyświetlenie informacji o prawidłowej zmianie hasła
 end
-@enduml
-
-## Diagram klas
-### Panel Admina
-@startuml
-class SignInPage <extends Page> {
-    
-}
-class SignInForm extends Form {
-    emailInput: TextInput
-    passwordInput: PasswordInput
-}
-SignInForm -- SignInPage 
-
-
-class User {
-    email: String
-    password: String
-}
-
-class AuthentificationMiddleware {
-    
-}
 @enduml

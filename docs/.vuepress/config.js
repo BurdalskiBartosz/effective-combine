@@ -27,6 +27,7 @@ module.exports = {
                 {
                     title: 'Aplikacja',
                     children: [
+                      'aplikacja/wymaganiafunkcjonalne',
                       'aplikacja/aktorzy',
                       'aplikacja/uzytkownik',
                       'aplikacja/task',
